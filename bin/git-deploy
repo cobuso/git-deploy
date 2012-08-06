@@ -214,7 +214,7 @@ module Git
 
         case modifier
         when 'A', 'M', 'C'
-          puts "Uploading #{local_file}"
+          puts "Uploading #{local_file} to #{remote_file}"
           self.put(local_file, remote_file)
         when 'D'
           puts "Deleting #{local_file}"
@@ -251,6 +251,7 @@ module Git
 #      sftp_options[:verbose] = :debug
       sftp_options[:port] = @uri.port if @uri.port
       sftp_options[:password] = @options['password'] if @options['password']
+
       @sftp = Net::SFTP.start(@options['host'], @options['user'], sftp_options)
     end
 
@@ -263,7 +264,7 @@ module Git
     end
 
     def delete(remote_file)
-      @sftp.remove!("#{@remote_file}")
+      @sftp.remove!("#{@path}/#{remote_file}")
     end
 
     def get_remote_revision
